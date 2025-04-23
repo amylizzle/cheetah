@@ -138,15 +138,11 @@ class Screen(Element):
                 -self.resolution[0] * self.pixel_size[0] / 2,
                 self.resolution[0] * self.pixel_size[0] / 2,
                 int(self.effective_resolution[0]) + 1,
-                device=self.pixel_size.device,
-                dtype=self.pixel_size.dtype,
             ),
             torch.linspace(
                 -self.resolution[1] * self.pixel_size[1] / 2,
                 self.resolution[1] * self.pixel_size[1] / 2,
                 int(self.effective_resolution[1]) + 1,
-                device=self.pixel_size.device,
-                dtype=self.pixel_size.dtype,
             ),
         )
 
@@ -186,7 +182,7 @@ class Screen(Element):
                 copy_of_incoming.particles[..., 0] -= self.misalignment[
                     ..., 0
                 ].unsqueeze(-1)
-                copy_of_incoming.particles[..., 2] -= self.misalignment[
+                copy_of_incoming.particles[..., 1] -= self.misalignment[
                     ..., 1
                 ].unsqueeze(-1)
 
@@ -282,14 +278,12 @@ class Screen(Element):
                 image, _ = torch.histogramdd(
                     torch.stack((read_beam.x, read_beam.y)).T,
                     bins=self.pixel_bin_edges,
-                    weight=read_beam.particle_charges.abs()
+                    weight=read_beam.particle_charges
                     * read_beam.survival_probabilities,
                 )
                 image = torch.flipud(image.T)
             elif self.method == "kde":
-                weights = (
-                    read_beam.particle_charges.abs() * read_beam.survival_probabilities
-                )
+                weights = read_beam.particle_charges * read_beam.survival_probabilities
                 broadcasted_x, broadcasted_y, broadcasted_weights = (
                     torch.broadcast_tensors(read_beam.x, read_beam.y, weights)
                 )
