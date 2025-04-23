@@ -443,7 +443,6 @@ def validate_understood_properties(understood: list[str], properties: dict) -> N
     :param properties: Dictionary of properties to validate.
     :return: None
     """
-    return True
     for property in properties:
         assert any([re.fullmatch(pattern, property) for pattern in understood]), (
             f"Property {property} with value {properties[property]} for element type"
