@@ -374,7 +374,12 @@ def convert_element(
             validate_understood_properties(
                 ["element_type", "group", "filename"], parsed
             )
-            return cheetah.Marker(name=name)
+            return cheetah.Screen(
+                pixel_size=torch.tensor([1e-6, 1e-6]),
+                is_active=True,
+                method="kde",
+                name=name,
+            )
         elif parsed["element_type"] in ["charge", "wake"]:
             print(
                 f"WARNING: Information provided in element {name} of type"
