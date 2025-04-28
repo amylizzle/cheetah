@@ -375,9 +375,9 @@ def convert_element(
                 ["element_type", "group", "filename"], parsed
             )
             return cheetah.Screen(
-                pixel_size=torch.tensor([1e-6, 1e-6]),
+                pixel_size=torch.tensor([1e-5, 1e-5]),
                 is_active=True,
-                method="kde",
+                method="histogram",
                 name=name,
             )
         elif parsed["element_type"] in ["charge", "wake"]:
